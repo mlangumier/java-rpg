@@ -1,5 +1,5 @@
 package rpg.interfaces;
 
 public interface Spell {
-    void useSpell();
+    int useSpell(int manaCost);
 }

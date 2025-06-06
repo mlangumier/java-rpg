@@ -64,6 +64,29 @@ public abstract class Character {
         this.defence = defence;
     }
 
+
+    /**
+     * (temp) Action ATTACK - regroups the actions a character makes when attacking.
+     * Calculates the attack score, checks if the attack hits the enemy and how much damage is dealt.
+     * (Uses other methods)
+     * @param target The target of the attack
+     */
+    public void attackAction(Character target) {
+        // TODO: full combat method (temp -> move to a CombatManager/ActionManager (PlayerService?) later)
+
+        int attackScore = this.calcAttack();
+        boolean doesAttackHits = checkIfAttackHits(attackScore, target);
+
+        if (doesAttackHits) {
+            int damage = this.calcDamage();
+            target.receivesDamage(damage);
+
+            System.out.printf("%s successfully attacked %s (%s) and dealt %s damage.%n", this.getName(), target.getName(), attackScore, damage);
+        } else {
+            System.out.printf("%s tried to attack %s but missed!%n", this.getName(), target.getName());
+        }
+    }
+
     /**
      * Calculates the score of the attack
      * @return The score of the attack the character is making.
@@ -77,7 +100,7 @@ public abstract class Character {
      * @param attack Score of the attack that the target is receiving
      * @return Whether the attack hits the target or not
      */
-    public boolean doesAttackHit(int attack, Character target) {
+    public boolean checkIfAttackHits(int attack, Character target) {
         return attack >= target.getDefence();
     }
 
@@ -101,7 +124,7 @@ public abstract class Character {
      * Checks if the character is still alive ("health" above "0")
      * @return Whether the character is still alive or not.
      */
-    public boolean isCharacterAlive() {
+    public boolean checkIfCharacterIsAlive() {
         return this.getHealth() > 0;
     }
 

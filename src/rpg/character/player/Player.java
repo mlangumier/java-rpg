@@ -69,7 +69,7 @@ public class Player extends Character implements Spell {
                 setHealth(this.getMaxHealth());
             }
 
-            System.out.printf("Healed %shp (%s/%s) -> %s)%n", roll, formerHealth, this.getMaxHealth(), this.showRemainingHealth());
+            System.out.printf("Healed %shp (%shp -> %shp)%n", roll, formerHealth, this.showRemainingHealth());
         } catch (MissingItemException | ResourceFullException e) {
             System.out.println(e.getMessage());
         } catch (Exception e) {
@@ -77,20 +77,43 @@ public class Player extends Character implements Spell {
         }
     }
 
-    @Override
-    public void useSpell() {
-        int manaCost = 10; // Default placeholder
+    /**
+     * (temp) Action casting a SPELL - regroup the actions a character makes when casting a spell.
+     * A spell never misses. Calculates the damage done to the enemy.
+     * @param target The target of the spell
+     */
+    public void spellAction (int manaCost, Character target) {
+        // TODO: full combat method (temp -> move to a CombatManager/ActionManager (PlayerService?) later)
+
         try {
             this.checkManaAvailability(manaCost);
+            this.setMana(getMana() - manaCost);
 
-            // TODO: Rework character to the attack ca be done with one function as well (calc, hits, dmg) & show log
-            // TODO: Implement spell-attack doing (attack)D8 dmg
+            int damage = useSpell(manaCost);
 
+            target.receivesDamage(damage);
+
+            System.out.printf("%s used a powerful spell against %s and dealt %s damage.%n", this.getName(), target.getName(), damage);
         } catch (NotEnoughResourceException e) {
             System.out.println(e.getMessage());
         } catch (Exception e) {
             System.err.printf("Error: %s (from: %s)%n", e.getMessage(), e.getClass());
         }
+    }
+
+    /**
+     * The player casts a powerful spell that cannot miss but consumes some of his mana
+     * [Spell damage = attack + (attack)D8 (ex: 4 + 4D8)]
+     * @param manaCost the amount of mana required to cast the spell
+     * @return The amount of damage the spell is going to inflict
+     */
+    @Override
+    public int useSpell(int manaCost) {
+        int damage = this.getAttack();
+        for (int i = this.getAttack(); i > 0; i--) {
+            damage += new Dice(8).rollDice();
+        }
+        return damage;
     }
 
     // --- EXCEPTIONS CHECKERS
@@ -122,7 +145,7 @@ public class Player extends Character implements Spell {
      */
     private void checkManaAvailability(int manaCost) throws NotEnoughResourceException {
         if (manaCost > this.getMana()) {
-            throw new NotEnoughResourceException("You don't have enough mana!");
+            throw new NotEnoughResourceException("You don't have enough mana to cast that spell!");
         }
     }
 
@@ -130,5 +153,4 @@ public class Player extends Character implements Spell {
     public String toString() {
         return String.format("Player: {name=%s, health=%s/%s, mana=%s/%s, attack_bonus=%s, defence=%s, nbr_of_potions=%s}", name, health, maxHealth, mana, maxMana, attack, defence, potion);
     }
-
 }

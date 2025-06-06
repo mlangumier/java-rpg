@@ -9,57 +9,40 @@ public class Main {
 
         // ----- TESTING GROUND (START)
 
-        Player player = new Player("Matt", 20, 4, 12, 20, 2);
-        Player enemy = new Player("Sam", 15, 5, 14, 21, 0);
-        System.out.println();
+        Player player = new Player("Matt", 30, 4, 12, 19, 2);
+        Player enemy = new Player("Sam", 20, 5, 14, 21, 0);
 
         try {
-            System.out.println("----- Matt's turn -----");
+            System.out.println("\n----- Matt's turn -----");
             player.usePotion();
+            player.attackAction(enemy);
+            player.spellAction(20, enemy);
 
-            int playerAtk = player.calcAttack();
-            System.out.println("Attack: " + playerAtk);
-            boolean playerAtkHits = player.doesAttackHit(playerAtk, enemy);
-            System.out.println("Hits?: " + playerAtkHits);
-
-            if (playerAtkHits) {
-                int dmg = player.calcDamage();
-                enemy.receivesDamage(dmg);
-                System.out.println("Damage: " + dmg);
-            }
-
-            System.out.println();
-
-            System.out.println("----- Sam's turn -----");
-            System.out.println(enemy);
-            if (enemy.isCharacterAlive()) {
+            if (enemy.checkIfCharacterIsAlive()) {
+                System.out.println("\n----- Sam's turn -----");
                 enemy.usePotion();
+                enemy.attackAction(player);
+                enemy.spellAction(20, player);
 
-                int enemyAtk = player.calcAttack();
-                System.out.println("Attack: " + enemyAtk);
-                boolean enemyAtkHit = player.doesAttackHit(enemyAtk, player);
-                System.out.println("Hits?: " + enemyAtkHit);
 
-                if (enemyAtkHit) {
-                    int dmg = enemy.calcDamage();
-                    player.receivesDamage(dmg);
-                    System.out.println("Damage: " + dmg);
+                if (player.checkIfCharacterIsAlive()) {
+                    System.out.println("\n----- Matt's turn -----");
+                    player.usePotion();
+                    player.setMana(player.getMana() + 5); // Add mana on turn 2 to cast spell
+                    player.spellAction(20, enemy);
+                    player.attackAction(enemy);
+                } else {
+                    System.out.println("Player is dead!");
                 }
             } else {
                 System.out.println("Enemy is dead!");
             }
 
-            System.out.println();
 
-            System.out.println("----- Matt's turn -----");
-            player.usePotion();
-            System.out.println(player); // Check player's status
-
-            System.out.println();
             // Check both:
-            System.out.printf("Player is alive: %s %nEnemy is alive: %s%n", player.isCharacterAlive(), enemy.isCharacterAlive());
+            System.out.printf("%nPlayer (alive:%s) -> %s %nEnemy (alive:%s) %s%n", player.checkIfCharacterIsAlive(), player, enemy.checkIfCharacterIsAlive(), enemy);
         } catch (Exception e) {
-            System.err.printf("Error: %s (from: %s)%n", e.getMessage(), e.getClass());
+            System.err.printf("%nError: %s (from: %s)%n", e.getMessage(), e.getClass());
         }
 
         // ----- TESTING GROUND (END)
