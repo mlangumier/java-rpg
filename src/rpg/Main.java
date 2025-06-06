@@ -6,6 +6,9 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("\n========== JAVA RPG ==========");
 
+        // TODO: Start simple input
+        // TODO: Setup combat manager
+        // TODO: Continue input to trigger combat manager
 
         // ----- TESTING GROUND (START)
 
@@ -50,12 +53,12 @@ public class Main {
         /**
          * --- CREATE ENTITIES
          * Character:
-         * - Player: has mana and can use powers (interface)
+                * - Player: has mana and can use powers (interface)
          * - Enemies: multiple types of enemies (each their own stats).
          * Combat manager: keeps track of turns & enemies felled (scores), has methods to manage combats & combatants.
          *
          * --- CREATE INTERFACES
-         * Powers
+                * Powers
          * (Dice -> types of dice?)
          *
          * --- TURN LOGIC
@@ -89,8 +92,8 @@ public class Main {
          *
          * --- EXCEPTIONS
          * Wrong input (show error & ask to input again)
-         * "Not enough mana" (show error & do nothing)
-         * "No potion available" (show error & do nothing)
+                * "Not enough mana" (show error & do nothing)
+                * "No potion available" (show error & do nothing)
          */
     }
 }
