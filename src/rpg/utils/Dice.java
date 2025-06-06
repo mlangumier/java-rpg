@@ -1,5 +1,7 @@
 package rpg.utils;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Random;
 
 // TODO: Turn into abstract parent and create dice types when needed ?
@@ -26,6 +28,20 @@ public class Dice {
      */
     public int rollDice() {
         return random.nextInt(value) + 1;
+    }
+
+    public int rollMultipleDice(int nbrDice) {
+        String[] rolls = new String[nbrDice];
+        int total = 0;
+
+        for (int i = 0; i < nbrDice; i++) {
+            int roll = this.rollDice();
+            total += roll;
+            rolls[i] = String.valueOf(roll);
+        }
+
+        System.out.print(Arrays.toString(rolls));
+        return total;
     }
 
     @Override

@@ -1,19 +1,30 @@
 package rpg;
 
+import rpg.character.enemy.creatures.Goblin;
 import rpg.character.player.Player;
+import rpg.enums.DiceType;
 
 public class Main {
     public static void main(String[] args) {
         System.out.println("\n========== JAVA RPG ==========");
 
+        // TODO: Setup enemies/monsters
         // TODO: Start simple input
         // TODO: Setup combat manager
         // TODO: Continue input to trigger combat manager
 
         // ----- TESTING GROUND (START)
 
+        System.out.println("ENUM :" + DiceType.TWENTY.getValue());
+
         Player player = new Player("Matt", 30, 4, 12, 19, 2);
         Player enemy = new Player("Sam", 20, 5, 14, 21, 0);
+        Goblin gobelin1 = new Goblin();
+        Goblin gobelin2 = new Goblin();
+        Goblin gobelin3 = new Goblin();
+        System.out.println("Gob1: " + gobelin1);
+        System.out.println("Gob2: " + gobelin2);
+        System.out.println("Gob3: " + gobelin3);
 
         try {
             System.out.println("\n----- Matt's turn -----");

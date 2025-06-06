@@ -10,6 +10,11 @@ public abstract class Character {
     protected int attack;
 
     /**
+     * Default Constructor
+     */
+    protected Character() {}
+
+    /**
      * Constructor
      * @param name Name of the character
      * @param maxHealth Maximum health of the character (can not go above), also sets the character's starting health
