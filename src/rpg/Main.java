@@ -1,8 +1,68 @@
 package rpg;
 
+import rpg.character.player.Player;
+
 public class Main {
     public static void main(String[] args) {
         System.out.println("\n========== JAVA RPG ==========");
+
+
+        // ----- TESTING GROUND (START)
+
+        Player player = new Player("Matt", 20, 4, 12, 20, 2);
+        Player enemy = new Player("Sam", 15, 5, 14, 21, 0);
+        System.out.println();
+
+        try {
+            System.out.println("----- Matt's turn -----");
+            player.usePotion();
+
+            int playerAtk = player.calcAttack();
+            System.out.println("Attack: " + playerAtk);
+            boolean playerAtkHits = player.doesAttackHit(playerAtk, enemy);
+            System.out.println("Hits?: " + playerAtkHits);
+
+            if (playerAtkHits) {
+                int dmg = player.calcDamage();
+                enemy.receivesDamage(dmg);
+                System.out.println("Damage: " + dmg);
+            }
+
+            System.out.println();
+
+            System.out.println("----- Sam's turn -----");
+            System.out.println(enemy);
+            if (enemy.isCharacterAlive()) {
+                enemy.usePotion();
+
+                int enemyAtk = player.calcAttack();
+                System.out.println("Attack: " + enemyAtk);
+                boolean enemyAtkHit = player.doesAttackHit(enemyAtk, player);
+                System.out.println("Hits?: " + enemyAtkHit);
+
+                if (enemyAtkHit) {
+                    int dmg = enemy.calcDamage();
+                    player.receivesDamage(dmg);
+                    System.out.println("Damage: " + dmg);
+                }
+            } else {
+                System.out.println("Enemy is dead!");
+            }
+
+            System.out.println();
+
+            System.out.println("----- Matt's turn -----");
+            player.usePotion();
+            System.out.println(player); // Check player's status
+
+            System.out.println();
+            // Check both:
+            System.out.printf("Player is alive: %s %nEnemy is alive: %s%n", player.isCharacterAlive(), enemy.isCharacterAlive());
+        } catch (Exception e) {
+            System.err.printf("Error: %s (from: %s)%n", e.getMessage(), e.getClass());
+        }
+
+        // ----- TESTING GROUND (END)
 
         /**
          * --- CREATE ENTITIES

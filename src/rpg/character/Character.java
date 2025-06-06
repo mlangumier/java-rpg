@@ -68,7 +68,7 @@ public abstract class Character {
      * Calculates the score of the attack
      * @return The score of the attack the character is making.
      */
-    protected int calcAttack() {
+    public int calcAttack() {
         return new Dice(20).rollDice() + this.getAttack();
     }
 
@@ -77,7 +77,7 @@ public abstract class Character {
      * @param attack Score of the attack that the target is receiving
      * @return Whether the attack hits the target or not
      */
-    protected boolean doesAttackHit(int attack, Character target) {
+    public boolean doesAttackHit(int attack, Character target) {
         return attack >= target.getDefence();
     }
 
@@ -85,39 +85,38 @@ public abstract class Character {
      * Calculates the damage the character does with his attack
      * @return The amount of damage the character will inflict
      */
-    protected int calcDamage() {
-        return this.attack + new Dice(6).rollDice();
+    public int calcDamage() {
+        return this.getAttack() + new Dice(6).rollDice();
     }
 
     /**
      * Records the damage taken by the character.
      * @param damage The amount of damage the character is taking
      */
-    protected void inflictDamage(int damage) {
-        this.health -= damage;
+    public void receivesDamage(int damage) {
+        this.setHealth(Math.max(this.getHealth() - damage, 0)); //Math.max(a,b) returns the highest: if damage drops the character bellow 0hp, set health to 0, else set the remaining health.
     }
 
     /**
      * Checks if the character is still alive ("health" above "0")
-     * @param character Character we're checking
      * @return Whether the character is still alive or not.
      */
-    protected boolean isCharacterAlive(Character character) {
-        return character.getHealth() > 0;
+    public boolean isCharacterAlive() {
+        return this.getHealth() > 0;
     }
 
     /**
      * Displays the character's health compared to their max health
      * @return A String showing how much health the character has compared to their max health
      */
-    protected String showRemainingHealth () {
+    public String showRemainingHealth () {
         return String.format("%s/%s", this.health, this.maxHealth);
     }
 
 
     @Override
     public String toString() {
-        return String.format("Character: {name='%s', health=%s/%s, attack_bonus=%s, defence=%s}", name, health, maxHealth, attack, defence);
+        return String.format("Character: {name=%s, health=%s/%s, attack_bonus=%s, defence=%s}", name, health, maxHealth, attack, defence);
     }
 
 }
