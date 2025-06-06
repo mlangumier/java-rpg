@@ -7,7 +7,7 @@ public class Main {
         /**
          * --- CREATE ENTITIES
          * Character:
-         * - Player: has mana and can use powers (interface), has potions (int -> not inventory yet)
+         * - Player: has mana and can use powers (interface)
          * - Enemies: multiple types of enemies (each their own stats).
          * Combat manager: keeps track of turns & enemies felled (scores), has methods to manage combats & combatants.
          *

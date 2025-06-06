@@ -2,13 +2,13 @@ package rpg.utils;
 
 import java.util.Random;
 
-// TODO: Turn into interface and create dice types when needed ?
+// TODO: Turn into abstract parent and create dice types when needed ?
 // TODO: Use DiceType instead of int ? (-> would need manager to transform value & then calculate)
 public class Dice {
     private int value;
-    Random random = new Random();
+    private final Random random = new Random();
 
-    public Dice(int value) {
+    public Dice (int value) {
         this.value = value;
     }
 

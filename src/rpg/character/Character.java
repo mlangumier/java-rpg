@@ -1,5 +1,7 @@
 package rpg.character;
 
+import rpg.utils.Dice;
+
 public abstract class Character {
     protected String name;
     protected int maxHealth;
@@ -9,10 +11,10 @@ public abstract class Character {
 
     /**
      * Constructor
-     * @param name
-     * @param maxHealth
-     * @param attack
-     * @param defence
+     * @param name Name of the character
+     * @param maxHealth Maximum health of the character (can not go above), also sets the character's starting health
+     * @param attack The bonus the character will add to their attack to hit other characters
+     * @param defence The protection score of the character, given through armor or evasion.
      */
     protected Character(String name, int maxHealth, int attack, int defence) {
         this.name = name;
@@ -63,42 +65,59 @@ public abstract class Character {
     }
 
     /**
-     * Check if the attack hits the other character.
-     * @param target The character that is receiving the attack
-     * @return Whether the attack hits the target or not
+     * Calculates the score of the attack
+     * @return The score of the attack the character is making.
      */
-    protected boolean attack(Character target) {
-        //TODO: modify this setup -> add D20
-        return this.getAttack() > target.getDefence();
+    protected int calcAttack() {
+        return new Dice(20).rollDice() + this.getAttack();
     }
 
     /**
-     * Record
-     * @param damage
-     * @return
+     * Checks whether the attack hits the target or not
+     * @param attack Score of the attack that the target is receiving
+     * @return Whether the attack hits the target or not
      */
-    protected void takeDamage(int damage) {
-        // TODO: Finish setup -> add D6
-//        this.getDefence() - damage;
-    };
+    protected boolean doesAttackHit(int attack, Character target) {
+        return attack >= target.getDefence();
+    }
 
     /**
-     * Checks if the character is still alive (still have positive "Health" stat)
-     * @param character Character we're checking to see if they're alive
-     * @return Wheter the character is still alive or not.
+     * Calculates the damage the character does with his attack
+     * @return The amount of damage the character will inflict
      */
-    protected boolean isAlive(Character character) {
+    protected int calcDamage() {
+        return this.attack + new Dice(6).rollDice();
+    }
+
+    /**
+     * Records the damage taken by the character.
+     * @param damage The amount of damage the character is taking
+     */
+    protected void inflictDamage(int damage) {
+        this.health -= damage;
+    }
+
+    /**
+     * Checks if the character is still alive ("health" above "0")
+     * @param character Character we're checking
+     * @return Whether the character is still alive or not.
+     */
+    protected boolean isCharacterAlive(Character character) {
         return character.getHealth() > 0;
     }
 
+    /**
+     * Displays the character's health compared to their max health
+     * @return A String showing how much health the character has compared to their max health
+     */
+    protected String showRemainingHealth () {
+        return String.format("%s/%s", this.health, this.maxHealth);
+    }
+
+
     @Override
     public String toString() {
-        return "Character{" +
-                "name='" + name + '\'' +
-                ", health=" + health +
-                ", attack=" + attack +
-                ", defence=" + defence +
-                '}';
+        return String.format("Character: {name='%s', health=%s/%s, attack_bonus=%s, defence=%s}", name, health, maxHealth, attack, defence);
     }
 
 }
