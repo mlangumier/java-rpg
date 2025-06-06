@@ -2,20 +2,22 @@ package rpg.character;
 
 public abstract class Character {
     protected String name;
+    protected int maxHealth;
     protected int health;
-    protected int attack;
     protected int defence;
+    protected int attack;
 
     /**
      * Constructor
      * @param name
-     * @param health
+     * @param maxHealth
      * @param attack
      * @param defence
      */
-    protected Character(String name, int health, int attack, int defence) {
+    protected Character(String name, int maxHealth, int attack, int defence) {
         this.name = name;
-        this.health = health;
+        this.maxHealth = maxHealth;
+        this.health = maxHealth;
         this.attack = attack;
         this.defence = defence;
     }
@@ -26,6 +28,14 @@ public abstract class Character {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+
+    public void setMaxHealth(int maxHealth) {
+        this.maxHealth = maxHealth;
     }
 
     public int getHealth() {
@@ -53,17 +63,23 @@ public abstract class Character {
     }
 
     /**
-     * Check if the attack hits the other character
+     * Check if the attack hits the other character.
      * @param target The character that is receiving the attack
      * @return Whether the attack hits the target or not
      */
     protected boolean attack(Character target) {
+        //TODO: modify this setup -> add D20
         return this.getAttack() > target.getDefence();
     }
 
-    // TODO: Method calcDamageTaken(int damage)
-    protected int calDamageTaken(int damage) {
-        return this.health;
+    /**
+     * Record
+     * @param damage
+     * @return
+     */
+    protected void takeDamage(int damage) {
+        // TODO: Finish setup -> add D6
+//        this.getDefence() - damage;
     };
 
     /**

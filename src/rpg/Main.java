@@ -1,7 +1,5 @@
 package rpg;
 
-import rpg.utils.Dice;
-
 public class Main {
     public static void main(String[] args) {
         System.out.println("\n========== JAVA RPG ==========");
@@ -9,21 +7,47 @@ public class Main {
         /**
          * --- CREATE ENTITIES
          * Character:
-         * - Player: has mana and can use powers (interface)
-         * - Enemies: multiple types of enemies
+         * - Player: has mana and can use powers (interface), has potions (int -> not inventory yet)
+         * - Enemies: multiple types of enemies (each their own stats).
          * Combat manager: keeps track of turns & enemies felled (scores), has methods to manage combats & combatants.
          *
          * --- CREATE INTERFACES
          * Powers
+         * (Dice -> types of dice?)
          *
          * --- TURN LOGIC
-         * Player goes first & attacks
-         * Check enemy damages & if still alive
+         * Player goes first & attacks -> Rolls a Dice20(+attack) = result attack
+         * Check enemy damage (D#+#) & if still alive
          * If dead, combat won! Next enemy
          * Else, enemy attacks
          * Check player damages & if still alive
          * If dead, lost fight -> display score & record in file
          * Else, next turn.
+         *
+         * --- RULES (add to readme)
+         * MaxHealth: maximum hit points. Character cannot have more Health than their MaxHealth.
+         * Health: hit points. When Health <= 0, the character is dead.
+         * Potion: number of potions available (only one sort at first), gives [insert calculus here] health back (ex: D&D minor potion)
+         * Attacking = D20 + character.attack
+         * Hit or not = Attacking > target's defence
+         * Damage = D6 + character.attack -> substract that to the target's health (to make the character stronger, the number of D6 can then be upgraded to (1 * level)D6 + character.attack)
+         * Mana = each spell requires mana, check if has enough first. ALSO: can use Mana to heal ONCE per combat.
+         *
+         * --- SCANNER (input)
+         * 1. Player's name (string)
+         * 2. Choice (int): Attack, Use Power, Use a Potion
+         *
+         * --- FILE READER
+         * On character death:
+         * - Gets data from file in an ordered list (by score DESC -- & LocalDate if same score)
+         * - Insert the player's name, score and datetime to the correct order in the list
+         * - Write the new list in the file
+         * - Display the player's score & the full list
+         *
+         * --- EXCEPTIONS
+         * Wrong input (show error & ask to input again)
+         * "Not enough mana" (show error & do nothing)
+         * "No potion available" (show error & do nothing)
          */
     }
 }
