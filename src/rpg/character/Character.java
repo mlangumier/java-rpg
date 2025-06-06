@@ -52,11 +52,28 @@ public abstract class Character {
         this.defence = defence;
     }
 
-    // TODO: Method attack(Character target)
+    /**
+     * Check if the attack hits the other character
+     * @param target The character that is receiving the attack
+     * @return Whether the attack hits the target or not
+     */
+    protected boolean attack(Character target) {
+        return this.getAttack() > target.getDefence();
+    }
 
     // TODO: Method calcDamageTaken(int damage)
+    protected int calDamageTaken(int damage) {
+        return this.health;
+    };
 
-    // TODO: Method isAlive()
+    /**
+     * Checks if the character is still alive (still have positive "Health" stat)
+     * @param character Character we're checking to see if they're alive
+     * @return Wheter the character is still alive or not.
+     */
+    protected boolean isAlive(Character character) {
+        return character.getHealth() > 0;
+    }
 
     @Override
     public String toString() {

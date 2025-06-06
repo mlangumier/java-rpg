@@ -1,8 +1,10 @@
 package rpg;
 
+import rpg.utils.Dice;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Welcome!\nEverything is fine.");
+        System.out.println("\n========== JAVA RPG ==========");
 
         /**
          * --- CREATE ENTITIES
