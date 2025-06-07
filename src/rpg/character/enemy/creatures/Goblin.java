@@ -7,13 +7,9 @@ import rpg.character.enemy.Enemy;
  */
 public class Goblin extends Enemy {
     /**
-     * Default Constructor
+     * Constructor
      */
     public Goblin() {
-        super();
-        this.setName("Goblin");
-        this.setHealth(7);  // 2d6
-        this.setAttack(this.generateAttackStat(4, 1)); // +1/+4
-        this.setDefence(13); // 8 + 2d4
+        super("Goblin", 7, 2, 12);
     }
 }

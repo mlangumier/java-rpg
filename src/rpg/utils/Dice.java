@@ -10,7 +10,7 @@ public class Dice {
     private int value;
     private final Random random = new Random();
 
-    public Dice (int value) {
+    public Dice(int value) {
         this.value = value;
     }
 
@@ -24,6 +24,7 @@ public class Dice {
 
     /**
      * Roll a dice of the chosen value
+     *
      * @return The value of the dice roll
      */
     public int rollDice() {
@@ -31,16 +32,16 @@ public class Dice {
     }
 
     public int rollMultipleDice(int nbrDice) {
-        String[] rolls = new String[nbrDice];
+//        String[] rolls = new String[nbrDice];
         int total = 0;
 
         for (int i = 0; i < nbrDice; i++) {
             int roll = this.rollDice();
             total += roll;
-            rolls[i] = String.valueOf(roll);
+//            rolls[i] = String.valueOf(roll);
         }
 
-        System.out.print(Arrays.toString(rolls));
+//        System.out.print(Arrays.toString(rolls));
         return total;
     }
 

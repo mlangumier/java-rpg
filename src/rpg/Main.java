@@ -15,61 +15,27 @@ public class Main {
 
         // ----- TESTING GROUND (START)
 
-        System.out.println("ENUM :" + DiceType.TWENTY.getValue());
+        Player player = new Player("Player", 30, 4, 17, 19, 2);
+        Player enemy = new Player("Enemy", 35, 5, 14, 21, 1);
+        testCombatPlayers(player, enemy);
 
-        Player player = new Player("Matt", 30, 4, 12, 19, 2);
-        Player enemy = new Player("Sam", 20, 5, 14, 21, 0);
-        Goblin gobelin1 = new Goblin();
-        Goblin gobelin2 = new Goblin();
-        Goblin gobelin3 = new Goblin();
-        System.out.println("Gob1: " + gobelin1);
-        System.out.println("Gob2: " + gobelin2);
-        System.out.println("Gob3: " + gobelin3);
+        Player hero = new Player("Hero", 5, 2, 12, 30, 1);
+        Goblin goblin = new Goblin();
+        testCombatHeroVsGoblin(hero, goblin);
 
-        try {
-            System.out.println("\n----- Matt's turn -----");
-            player.usePotion();
-            player.attackAction(enemy);
-            player.spellAction(20, enemy);
-
-            if (enemy.checkIfCharacterIsAlive()) {
-                System.out.println("\n----- Sam's turn -----");
-                enemy.usePotion();
-                enemy.attackAction(player);
-                enemy.spellAction(20, player);
-
-
-                if (player.checkIfCharacterIsAlive()) {
-                    System.out.println("\n----- Matt's turn -----");
-                    player.usePotion();
-                    player.setMana(player.getMana() + 5); // Add mana on turn 2 to cast spell
-                    player.spellAction(20, enemy);
-                    player.attackAction(enemy);
-                } else {
-                    System.out.println("Player is dead!");
-                }
-            } else {
-                System.out.println("Enemy is dead!");
-            }
-
-
-            // Check both:
-            System.out.printf("%nPlayer (alive:%s) -> %s %nEnemy (alive:%s) %s%n", player.checkIfCharacterIsAlive(), player, enemy.checkIfCharacterIsAlive(), enemy);
-        } catch (Exception e) {
-            System.err.printf("%nError: %s (from: %s)%n", e.getMessage(), e.getClass());
-        }
+        testMiscellaneous();
 
         // ----- TESTING GROUND (END)
 
         /**
          * --- CREATE ENTITIES
          * Character:
-                * - Player: has mana and can use powers (interface)
+         * - Player: has mana and can use powers (interface)
          * - Enemies: multiple types of enemies (each their own stats).
          * Combat manager: keeps track of turns & enemies felled (scores), has methods to manage combats & combatants.
          *
          * --- CREATE INTERFACES
-                * Powers
+         * Powers
          * (Dice -> types of dice?)
          *
          * --- TURN LOGIC
@@ -103,8 +69,80 @@ public class Main {
          *
          * --- EXCEPTIONS
          * Wrong input (show error & ask to input again)
-                * "Not enough mana" (show error & do nothing)
-                * "No potion available" (show error & do nothing)
+         * "Not enough mana" (show error & do nothing)
+         * "No potion available" (show error & do nothing)
          */
+    }
+
+    public static void testCombatPlayers(Player player, Player enemy) {
+        System.out.println("\n---------- TEST COMBAT - PLAYER vs PLAYER ----------\n");
+
+        try {
+            int turnCounter = 1;
+
+            while (player.checkIfCharacterIsAlive()) {
+                System.out.printf("----- Turn %s -----%n", turnCounter++);
+                if (turnCounter > 1) {
+                    player.setMana(player.getMana() + 5);
+                }
+
+                // Forgetting to check potion > 0 on purpose
+                if (player.getHealth() < player.getMaxHealth()) {
+                    player.usePotion();
+                }
+
+                if (player.getMana() >= 20) {
+                    player.spellAction(20, enemy);
+                } else {
+                    player.attackAction(enemy);
+                }
+
+                if (!enemy.checkIfCharacterIsAlive()) {
+                    System.out.println("Enemy is dead!");
+                    break;
+                } else {
+                    if ((enemy.getHealth() <= enemy.getMaxHealth() / 2) && (enemy.getPotion() > 0)) {
+                        enemy.usePotion();
+                    } else {
+                        enemy.attackAction(player);
+                    }
+                }
+            }
+
+            System.out.printf("%nPlayer (alive:%s) -> %s %nEnemy (alive:%s) %s%n", player.checkIfCharacterIsAlive(), player, enemy.checkIfCharacterIsAlive(), enemy);
+        } catch (Exception e) {
+            System.err.printf("%nError: %s (from: %s)%n", e.getMessage(), e.getClass());
+        }
+    }
+
+    public static void testCombatHeroVsGoblin(Player player, Goblin goblin) {
+        System.out.println("\n---------- TEST COMBAT - HERO vs GOBLIN ----------");
+
+        try {
+            int counter = 1;
+            while (player.checkIfCharacterIsAlive()) {
+                System.out.printf("%n--- Turn %s ---%n", counter++);
+                player.attackAction(goblin);
+
+                if (!goblin.checkIfCharacterIsAlive()) {
+                    System.out.println("Goblin is dead!");
+                    break;
+                } else {
+                    goblin.attackAction(player);
+                }
+
+                System.out.println("Hero is dead!");
+            }
+
+            System.out.printf("%nHero (alive:%s) -> %s %nGoblin (alive:%s) %s%n", player.checkIfCharacterIsAlive(), player, goblin.checkIfCharacterIsAlive(), goblin);
+        } catch (Exception e) {
+            System.err.printf("%nError: %s (from: %s)%n", e.getMessage(), e.getClass());
+        }
+    }
+
+    public static void testMiscellaneous() {
+        System.out.println("\n---------- TEST MISCELLANEOUS ----------\n");
+
+        System.out.printf("D20: Enum=%s -> value=%s %n", DiceType.TWENTY, DiceType.TWENTY.getValue());
     }
 }

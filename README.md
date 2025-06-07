@@ -10,15 +10,6 @@ To start the game, simply clone the repository, get inside with your terminal, a
   java src/rpg/Main.java
 ```
 
-## Glossary
-
-### Dice Rolls
-When you see something like `d6` or `d20`, this means we're using a dice with the corresponding number of sides. Therefore, a `d6` refers to a `6 sided Die`.
-> Trivia: Even though the conventional use is: Singular "die", Plural "dice", its uses mostly depend on the context.
-
-### Combat rules
-(coming soon)
-
 ## Features
 - [ ] Character creation
   - [ ] Create a simple character
@@ -32,3 +23,13 @@ When you see something like `d6` or `d20`, this means we're using a dice with th
 - [ ] (bonus) Inventory
   - [ ] Find items
   - [ ] Display and use items
+
+## Glossary
+
+### Dice Rolls
+When you see something like `d6` or `d20`, this means we're using a dice with the corresponding number of sides. Therefore, a `d6` refers to a `6 sided Die`.  
+Furthermore, when we use something like `2d6` or `(number)d6`, that mean we roll multiple times the specified dice. Therefore, `2d6` means that we're rolling `two (2)` `six-sided (d6)` dice.
+> Trivia: Even though the conventional use is "one **die**, multiple **dice**", its uses mostly depend on the context and personal preferences.
+
+### Combat rules
+(coming soon)
