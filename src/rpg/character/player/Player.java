@@ -153,7 +153,7 @@ public class Player extends Character implements Spell {
     // --- DISPLAY METHODS
 
     public String getInfo () {
-        return String.format("%s | %s/%s HP | %s/%s Mana | %s Potion%s", this.getName(), this.getHealth(), this.getMaxHealth(), this.getMana(), this.getMaxMana(), this.getPotion(), this.getPotion() > 1 ? "s" : "");
+        return String.format("%s: %s/%s HP | %s/%s Mana | %s Potion%s", this.getName(), this.getHealth(), this.getMaxHealth(), this.getMana(), this.getMaxMana(), this.getPotion(), this.getPotion() > 1 ? "s" : "");
     }
 
     @Override

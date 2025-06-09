@@ -1,42 +1,51 @@
 package rpg.services;
 
 import rpg.character.enemy.Enemy;
-import rpg.character.enemy.creatures.Goblin;
-import rpg.character.enemy.creatures.GoblinLeader;
-import rpg.character.enemy.creatures.Troll;
-import rpg.character.enemy.creatures.Wolf;
+import rpg.character.enemy.creatures.*;
 import rpg.character.player.Player;
+import rpg.enums.EnemyType;
+import rpg.exceptions.FailedEnemyCreation;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class GameManager {
     Random random = new Random();
-    List<Enemy> enemies = new ArrayList<>();
 
     public GameManager() {
-        enemies.add(new Wolf());
-        enemies.add(new Goblin());
-        enemies.add(new GoblinLeader());
-        enemies.add(new Troll());
+        // Document why this constructor is empty (sonarqube)
     }
 
     /**
-     *
-     * @param name
-     * @return
+     * Create a new character named by the player.
+     * @param name Name the player gives to the character.
+     * @return A new character.
      */
     public Player createPlayerCharacter (String name) {
         return new Player(name, 50, 5, 15, 30, 1);
     }
 
     /**
-     *
-     * @return
+     * Create a random enemy from the different types available.
+     * (suggestion for later: update the random method & switch to work in percentage & define "rarity" for enemies so easier enemies appear more often that strong enemies.
+     * @return A new enemy.
      */
     public Enemy createNewEnemy () {
-        // Bonus: % of chance to be selected depends on enemy difficulty)
-        return this.enemies.get(random.nextInt(enemies.size()));
+        EnemyType randomEnemy = EnemyType.values()[random.nextInt(EnemyType.values().length)];
+
+        return switch (randomEnemy) {
+            case EnemyType.GOBLIN -> new Goblin();
+            case EnemyType.GOBLIN_LEADER -> new GoblinLeader();
+            case EnemyType.TROLL ->  new Troll();
+            case EnemyType.WOLF ->  new Wolf();
+            case EnemyType.DRAGON -> new Dragon();
+        };
+    }
+
+    /**
+     * Displays the actions the player can take during his turn.
+     * @return A string that displays the actions the player can take.
+     */
+    public String displayActionChoices() {
+        return "1. Attack | 2. Cast Spell | 3. Drink Potion | 4. Exit Game";
     }
 }
