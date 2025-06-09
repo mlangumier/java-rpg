@@ -1,6 +1,7 @@
 package rpg.character.enemy;
 
 import rpg.character.Character;
+import rpg.enums.DiceType;
 import rpg.utils.Dice;
 
 public abstract class Enemy extends Character {
@@ -28,11 +29,17 @@ public abstract class Enemy extends Character {
 
     /**
      * Generate the enemy's { attack } stat randomly by rolling a dice {hitDie} multiple times {numberOfDice}
-     * @param hitDie Which dice to use to roll (d6, d8, d12, etc.)
+     * @param hitDie {enum DiceType} Which dice to use to roll (d6, d8, d12, etc.)
      * @param numberOfDice How many dice do we roll
      * @return The attack bonus score of the enemy
      */
-    public int generateAttackStat(int hitDie, int numberOfDice) {
+    public int generateAttackStat(DiceType hitDie, int numberOfDice) {
         return new Dice(hitDie).rollMultipleDice(numberOfDice);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Enemy: {name=%s, health=%s/%s, attack_bonus=%s, defence=%s}", name, health, maxHealth, attack, defence);
+
     }
 }

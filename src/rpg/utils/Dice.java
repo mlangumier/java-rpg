@@ -1,24 +1,22 @@
 package rpg.utils;
 
-import java.lang.reflect.Array;
-import java.util.Arrays;
+import rpg.enums.DiceType;
+
 import java.util.Random;
 
-// TODO: Turn into abstract parent and create dice types when needed ?
-// TODO: Use DiceType instead of int ? (-> would need manager to transform value & then calculate)
 public class Dice {
-    private int value;
+    private DiceType value;
     private final Random random = new Random();
 
-    public Dice(int value) {
+    public Dice(DiceType value) {
         this.value = value;
     }
 
-    public int getValue() {
+    public DiceType getValue() {
         return value;
     }
 
-    public void setValue(int value) {
+    public void setValue(DiceType value) {
         this.value = value;
     }
 
@@ -28,20 +26,17 @@ public class Dice {
      * @return The value of the dice roll
      */
     public int rollDice() {
-        return random.nextInt(value) + 1;
+        return random.nextInt(value.getValue()) + 1;
     }
 
     public int rollMultipleDice(int nbrDice) {
-//        String[] rolls = new String[nbrDice];
         int total = 0;
 
         for (int i = 0; i < nbrDice; i++) {
             int roll = this.rollDice();
             total += roll;
-//            rolls[i] = String.valueOf(roll);
         }
 
-//        System.out.print(Arrays.toString(rolls));
         return total;
     }
 

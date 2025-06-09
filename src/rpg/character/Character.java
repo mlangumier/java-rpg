@@ -1,5 +1,6 @@
 package rpg.character;
 
+import rpg.enums.DiceType;
 import rpg.utils.Dice;
 
 public abstract class Character {
@@ -97,7 +98,7 @@ public abstract class Character {
      * @return The score of the attack the character is making.
      */
     public int calcAttack() {
-        return new Dice(20).rollDice() + this.getAttack();
+        return new Dice(DiceType.TWENTY).rollDice() + this.getAttack();
     }
 
     /**
@@ -114,7 +115,7 @@ public abstract class Character {
      * @return The amount of damage the character will inflict
      */
     public int calcDamage() {
-        return this.getAttack() + new Dice(6).rollDice();
+        return this.getAttack() + new Dice(DiceType.SIX).rollDice();
     }
 
     /**
@@ -146,5 +147,4 @@ public abstract class Character {
     public String toString() {
         return String.format("Character: {name=%s, health=%s/%s, attack_bonus=%s, defence=%s}", name, health, maxHealth, attack, defence);
     }
-
 }

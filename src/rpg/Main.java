@@ -8,15 +8,10 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("\n========== JAVA RPG ==========");
 
-        // TODO: Setup enemies/monsters
-        // TODO: Start simple input
-        // TODO: Setup combat manager
-        // TODO: Continue input to trigger combat manager
-
         // ----- TESTING GROUND (START)
 
-        Player player = new Player("Player", 30, 4, 17, 19, 2);
-        Player enemy = new Player("Enemy", 35, 5, 14, 21, 1);
+        Player player = new Player("Player", 30, 4, 17, 30, 2);
+        Player enemy = new Player("Enemy", 35, 5, 14, 20, 1);
         testCombatPlayers(player, enemy);
 
         Player hero = new Player("Hero", 5, 2, 12, 30, 1);
@@ -28,15 +23,22 @@ public class Main {
         // ----- TESTING GROUND (END)
 
         /**
+         * --- TODO:
+         * - [x] Refactor `Dice` to work with Enum
+         * - [] Create other types of enemies (ex: Goblin leader, wolf, troll, dragon)
+         * - [] Being Input (Scanner) setup & tests
+         * - [] Test Exceptions & rework implementation if need be
+         * - [] CombatManager or EnemyService to manage a list of enemies (?)
+         *
          * --- CREATE ENTITIES
          * Character:
-         * - Player: has mana and can use powers (interface)
-         * - Enemies: multiple types of enemies (each their own stats).
-         * Combat manager: keeps track of turns & enemies felled (scores), has methods to manage combats & combatants.
+         * - [x] Player: has mana and can use powers (interface)
+         * - [] Enemies: multiple types of enemies (each their own stats).
+         * - [] Combat manager: keeps track of turns & enemies felled (scores), has methods to manage combats & combatants.
          *
          * --- CREATE INTERFACES
-         * Powers
-         * (Dice -> types of dice?)
+         * - [x] Powers
+         * - [x] (Dice -> types of dice?)
          *
          * --- TURN LOGIC
          * Player goes first & attacks -> Rolls a Dice20(+attack) = result attack
@@ -53,24 +55,26 @@ public class Main {
          * Potion: number of potions available (only one sort at first), gives [insert calculus here] health back (ex: D&D minor potion)
          * Attacking = D20 + character.attack
          * Hit or not = Attacking > target's defence
-         * Damage = D6 + character.attack -> substract that to the target's health (to make the character stronger, the number of D6 can then be upgraded to (1 * level)D6 + character.attack)
+         * Damage = D6 + character.attack -> subtract that to the target's health (to make the character stronger, the number of D6 can then be upgraded to (1 * level)D6 + character.attack)
          * Mana = each spell requires mana, check if has enough first. ALSO: can use Mana to heal ONCE per combat.
          *
          * --- SCANNER (input)
-         * 1. Player's name (string)
-         * 2. Choice (int): Attack, Use Power, Use a Potion
+         * - [] Player's name (string)
+         * - [] Choice (int): Attack, Use Power, Use a Potion
+         * - [] On input error, show error message & show choices again + ask input again
          *
          * --- FILE READER
          * On character death:
-         * - Gets data from file in an ordered list (by score DESC -- & LocalDate if same score)
-         * - Insert the player's name, score and datetime to the correct order in the list
-         * - Write the new list in the file
-         * - Display the player's score & the full list
+         * - [] Display "You died" message
+         * - [] Gets data from file in an ordered list (by score DESC -- & LocalDate if same score)
+         * - [] Insert the player's name, score and datetime to the correct order in the list
+         * - [] Write the new list in the file
+         * - [] Display the player's score & the full list
          *
          * --- EXCEPTIONS
-         * Wrong input (show error & ask to input again)
-         * "Not enough mana" (show error & do nothing)
-         * "No potion available" (show error & do nothing)
+         * - [] Wrong input (show error & ask to input again) -> Player Name & Action choice
+         * - [x] "Not enough mana" (show error & do nothing)
+         * - [x] "No potion available" (show error & do nothing)
          */
     }
 
@@ -82,6 +86,7 @@ public class Main {
 
             while (player.checkIfCharacterIsAlive()) {
                 System.out.printf("----- Turn %s -----%n", turnCounter++);
+                System.out.printf("%s: %s/%s HP, %s mana, %s potions %n", player.getName(), player.getHealth(), player.getMaxHealth(), player.getMana(), player.getPotion());
                 if (turnCounter > 1) {
                     player.setMana(player.getMana() + 5);
                 }
@@ -130,11 +135,9 @@ public class Main {
                 } else {
                     goblin.attackAction(player);
                 }
-
-                System.out.println("Hero is dead!");
             }
 
-            System.out.printf("%nHero (alive:%s) -> %s %nGoblin (alive:%s) %s%n", player.checkIfCharacterIsAlive(), player, goblin.checkIfCharacterIsAlive(), goblin);
+            System.out.printf("%n%s %n%s%n", player, goblin);
         } catch (Exception e) {
             System.err.printf("%nError: %s (from: %s)%n", e.getMessage(), e.getClass());
         }

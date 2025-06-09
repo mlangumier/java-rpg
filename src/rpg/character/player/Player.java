@@ -1,6 +1,7 @@
 package rpg.character.player;
 
 import rpg.character.Character;
+import rpg.enums.DiceType;
 import rpg.exceptions.MissingItemException;
 import rpg.exceptions.NotEnoughResourceException;
 import rpg.exceptions.ResourceFullException;
@@ -62,7 +63,7 @@ public class Player extends Character implements Spell {
             this.checkIsHealthFull();
 
             int formerHealth = getHealth();
-            int roll = new Dice(4).rollDice() + 4;
+            int roll = new Dice(DiceType.FOUR).rollDice() + 4;
             this.setHealth(this.getHealth() + roll);
 
             if (this.getHealth() > this.getMaxHealth()) {
@@ -111,7 +112,7 @@ public class Player extends Character implements Spell {
     public int useSpell(int manaCost) {
         int damage = this.getAttack();
         for (int i = this.getAttack(); i > 0; i--) {
-            damage += new Dice(8).rollDice();
+            damage += new Dice(DiceType.EIGHT).rollDice();
         }
         return damage;
     }
