@@ -1,41 +1,73 @@
 package rpg;
 
+import rpg.character.enemy.Enemy;
 import rpg.character.enemy.creatures.Goblin;
-import rpg.character.enemy.creatures.GoblinLeader;
-import rpg.character.enemy.creatures.Troll;
-import rpg.character.enemy.creatures.Wolf;
 import rpg.character.player.Player;
-import rpg.enums.DiceType;
+import rpg.enums.ActionType;
+import rpg.services.GameManager;
+import rpg.utils.Action;
+
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("\n========== JAVA RPG ==========");
+        Scanner scanner = new Scanner(System.in);
+        GameManager gameManager = new GameManager();
+        Action action = new Action();
+        Player player;
+        Enemy enemy; // (default) Easy first enemy
 
-        // ----- TESTING GROUND (START)
+        System.out.println("\n========= JAVA RPG ==========\n");
 
-        Player player = new Player("Player", 30, 4, 17, 30, 2);
-        Player enemy = new Player("Enemy", 35, 5, 14, 20, 1);
-        testCombatPlayers(player, enemy);
+        // ----- CHARACTER CREATION
+        // TODO: manage error for wrong input (empty and perhaps regex other than [-'])
+        System.out.print("Enter a name for your character: ");
+        String characterName = scanner.nextLine();
 
-        Player hero = new Player("Hero", 5, 2, 12, 30, 1);
-        Goblin goblin = new Goblin();
-        testCombatHeroVsGoblin(hero, goblin);
+        player = gameManager.createPlayerCharacter(characterName);
+        System.out.printf("Your character: %s%n%n", player.getInfo());
 
-        GoblinLeader  goblinLeader = new GoblinLeader();
-        Troll troll = new Troll();
-        Wolf  wolf = new Wolf();
+        // ----- GAME BEGINS
+        while (player.checkIfCharacterIsAlive()) {
+            // Init combat
+            enemy = gameManager.createNewEnemy();
 
-        System.out.println(goblinLeader.toString());
-        System.out.println(troll.toString());
-        System.out.println(wolf.toString());
+            // TODO: MANAGE THIS FIRST !!!
+            // TODO: method to manage a combat (1 player vs 1 enemy -> return the character who's alive)
+            // -> So once a combat is over, back into WHILE_LOOP & create another enemy + add kill to counter
+            System.out.println(player.getInfo());
+            System.out.printf("Actions: %s %nChoose an action: ", action.displayActionChoices());
+            int selectedAction = scanner.nextInt();
 
-        // ----- TESTING GROUND (END)
+            // TODO: manage errors for non-int & non-valid values
+            switch (action.getActionType(selectedAction)) {
+                case ActionType.ATTACK -> player.attackAction(enemy);
+                case ActionType.CAST_SPELL -> player.spellAction(enemy);
+                case ActionType.DRINK_POTION -> player.usePotion();
+                case ActionType.LEAVE_GAME -> scanner.close();
+                default -> System.out.println("Please select a a valid action");
+            }
+
+            if (enemy.checkIfCharacterIsAlive()) {
+                System.out.println("(temp) Enemy plays its turn");
+            } else {
+                System.out.printf("%s is dead!", enemy.getName());
+            }
+
+            // Check if this is read by the console
+            if (!player.checkIfCharacterIsAlive()) {
+                System.out.printf("----- Oh no! %s was killed by %s! -----", player.getName(), enemy.getName());
+            }
+        }
+
+
+        scanner.close();
 
         /**
          * --- TODO:
          * - [x] Refactor `Dice` to work with Enum
-         * - [] Create other types of enemies (ex: Goblin leader, wolf, troll, dragon)
-         * - [] Being Input (Scanner) setup & tests
+         * - [x] Create other types of enemies (ex: Goblin leader, wolf, troll, dragon)
+         * - [x] Being Input (Scanner) setup & tests
          * - [] Test Exceptions & rework implementation if need be
          * - [] CombatManager or EnemyService to manage a list of enemies (?)
          *
@@ -106,7 +138,7 @@ public class Main {
                 }
 
                 if (player.getMana() >= 20) {
-                    player.spellAction(20, enemy);
+                    player.spellAction(enemy);
                 } else {
                     player.attackAction(enemy);
                 }

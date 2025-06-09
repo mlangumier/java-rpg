@@ -83,8 +83,9 @@ public class Player extends Character implements Spell {
      * A spell never misses. Calculates the damage done to the enemy.
      * @param target The target of the spell
      */
-    public void spellAction (int manaCost, Character target) {
+    public void spellAction (Character target) {
         // TODO: full combat method (temp -> move to a CombatManager/ActionManager (PlayerService?) later)
+        int manaCost = 20;
 
         try {
             this.checkManaAvailability(manaCost);
@@ -148,6 +149,11 @@ public class Player extends Character implements Spell {
         if (manaCost > this.getMana()) {
             throw new NotEnoughResourceException("You don't have enough mana to cast that spell!");
         }
+    }
+    // --- DISPLAY METHODS
+
+    public String getInfo () {
+        return String.format("%s | %s/%s HP | %s/%s Mana | %s Potion%s", this.getName(), this.getHealth(), this.getMaxHealth(), this.getMana(), this.getMaxMana(), this.getPotion(), this.getPotion() > 1 ? "s" : "");
     }
 
     @Override

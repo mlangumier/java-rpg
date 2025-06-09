@@ -37,6 +37,10 @@ public abstract class Enemy extends Character {
         return new Dice(hitDie).rollMultipleDice(numberOfDice);
     }
 
+    public String getInfo () {
+        return String.format("%s: %s HP",  this.getName(), this.getHealth());
+    }
+
     @Override
     public String toString() {
         return String.format("Enemy: {name=%s, health=%s/%s, attack_bonus=%s, defence=%s}", name, health, maxHealth, attack, defence);
