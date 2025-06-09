@@ -40,6 +40,5 @@ public abstract class Enemy extends Character {
     @Override
     public String toString() {
         return String.format("Enemy: {name=%s, health=%s/%s, attack_bonus=%s, defence=%s}", name, health, maxHealth, attack, defence);
-
     }
 }

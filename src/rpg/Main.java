@@ -1,6 +1,9 @@
 package rpg;
 
 import rpg.character.enemy.creatures.Goblin;
+import rpg.character.enemy.creatures.GoblinLeader;
+import rpg.character.enemy.creatures.Troll;
+import rpg.character.enemy.creatures.Wolf;
 import rpg.character.player.Player;
 import rpg.enums.DiceType;
 
@@ -18,7 +21,13 @@ public class Main {
         Goblin goblin = new Goblin();
         testCombatHeroVsGoblin(hero, goblin);
 
-        testMiscellaneous();
+        GoblinLeader  goblinLeader = new GoblinLeader();
+        Troll troll = new Troll();
+        Wolf  wolf = new Wolf();
+
+        System.out.println(goblinLeader.toString());
+        System.out.println(troll.toString());
+        System.out.println(wolf.toString());
 
         // ----- TESTING GROUND (END)
 
@@ -141,11 +150,5 @@ public class Main {
         } catch (Exception e) {
             System.err.printf("%nError: %s (from: %s)%n", e.getMessage(), e.getClass());
         }
-    }
-
-    public static void testMiscellaneous() {
-        System.out.println("\n---------- TEST MISCELLANEOUS ----------\n");
-
-        System.out.printf("D20: Enum=%s -> value=%s %n", DiceType.TWENTY, DiceType.TWENTY.getValue());
     }
 }
