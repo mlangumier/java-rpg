@@ -9,11 +9,13 @@ import rpg.exceptions.ResourceFullException;
 import rpg.exceptions.WrongUserInput;
 import rpg.services.GameManager;
 import rpg.services.ScannerManager;
+import rpg.services.ScoreManager;
 
 public class Main {
     public static void main(String[] args) {
-        ScannerManager scanner = new ScannerManager();
+        ScannerManager scannerManager = new ScannerManager();
         GameManager gameManager = new GameManager();
+        ScoreManager scoreManager = new ScoreManager();
 
         Player player;
         Enemy enemy;
@@ -22,45 +24,46 @@ public class Main {
 
         System.out.println("\n========= JAVA RPG ==========\n");
 
-        // ----- CHARACTER CREATION
-        String characterName = "";
-        while (characterName.isEmpty()) {
+        // INFO -- CHARACTER CREATION
+        while (true) {
             try {
                 System.out.print("Enter a name for your character: ");
-                characterName = scanner.inputCharacterName();
+                String characterName = scannerManager.inputCharacterName();
+
+                player = gameManager.createPlayerCharacter(characterName);
+                System.out.printf("Created -> %s%n", player.getInfo());
+                break;
             } catch (Exception e) {
                 System.out.print(e.getMessage() + " ");
             }
         }
 
-        player = gameManager.createPlayerCharacter(characterName);
-        System.out.printf("Created -> %s%n", player.getInfo());
 
-        // ----- GAME BEGINS
+        // INFO -- GAME BEGINS
         while (player.checkIfCharacterIsAlive()) {
             System.out.println();
             boolean gameMustClose = false;
             int turnCounter = 0;
 
-            // Init combat
+            // INFO -- Init combat
             enemy = gameManager.createNewEnemy();
-            System.out.printf("--- COMBAT %s - A %s appears!%n", ++combatCounter, enemy.getName());
+            System.out.printf("===== Combat %s - A %s appears! =====%n", ++combatCounter, enemy.getName());
 
-            // ----- COMBAT BEGINS (player vs enemy)
+            // INFO -- COMBAT BEGINS (player vs enemy)
             while (player.checkIfCharacterIsAlive() && enemy.checkIfCharacterIsAlive()) {
                 System.out.println();
-                System.out.printf("- Turn %s %n", ++turnCounter);
+                System.out.printf("===== Turn %s =====%n", ++turnCounter);
 
                 // Setup method to manage a combat (1 player vs 1 enemy -> return the character who's alive)
                 // -> So once a combat is over, back into WHILE_LOOP & create another enemy + add kill to counter
-                System.out.println("> " + player.getInfo());
-                System.out.println("> " + enemy.getInfo());
-                System.out.printf("Actions: %s %nChoose an action: ", gameManager.displayActionChoices());
+                System.out.println("- " + player.getInfo());
+                System.out.println("- " + enemy.getInfo());
+                System.out.printf("> Actions: %s %n> Choose an action: ", gameManager.displayActionChoices());
 
-                // ----- PLAYER CHOSES AN ACTION
+                // INFO -- PLAYER CHOSES AN ACTION
                 while (true) {
                     try {
-                        ActionType selectedAction = scanner.inputAction(); // Manage errors for non-int & non-valid values
+                        ActionType selectedAction = scannerManager.inputAction();
 
                         switch (selectedAction) {
                             case ActionType.ATTACK -> player.attackAction(enemy);
@@ -70,9 +73,13 @@ public class Main {
                         }
 
                         break;
-                    } catch (WrongUserInput | NotEnoughResourceException | MissingItemException | ResourceFullException e) {
+                    } catch (WrongUserInput | NotEnoughResourceException | MissingItemException |
+                             ResourceFullException e) {
                         System.out.println(e.getMessage());
-                        System.out.printf("%s %nChose an action: ", gameManager.displayActionChoices());
+                        System.out.printf("%s %n> Chose an action: ", gameManager.displayActionChoices());
+                    } catch (NumberFormatException e) {
+                        System.out.println("Please enter a valid number.");
+                        System.out.printf("%s %n> Chose an action: ", gameManager.displayActionChoices());
                     } catch (Exception e) {
                         System.out.print(e.getMessage() + " ");
                     }
@@ -86,36 +93,45 @@ public class Main {
                 if (enemy.checkIfCharacterIsAlive()) {
                     enemy.attackAction(player);
                 } else {
-                    System.out.printf("%s is dead!%n", enemy.getName());
+                    System.out.printf("=== %s is dead!%n", enemy.getName());
                     enemiesKilled++;
                     try {
+                        System.out.println("\nLooting the body and resting for a bit.");
+                        System.out.println("You found one (1) potion.");
                         player.addPotion();
-                        player.regainMana(5);
+                        player.regainMana(15);
+                    } catch (ResourceFullException ignored) {
+                        // Adapt this later if setup inventory space
                     } catch (Exception e) {
                         System.out.print(e.getMessage() + " ");
                     }
                 }
             }
 
-            if (gameMustClose) {
-                System.out.println(player.getName() + " managed to flee from the fight! (game closed)");
-                break;
-            }
-
-            // Check if this is read by the console
-            if (!player.checkIfCharacterIsAlive()) {
-                System.out.printf("----- Oh no! %s was killed by %s! -----%n", player.getName(), enemy.getName());
-                System.out.println("Total enemies killed: " + enemiesKilled);
+            // INFO -- CLOSING GAME
+            if (gameMustClose || !player.checkIfCharacterIsAlive()) {
+                if (gameMustClose) {
+                    System.out.println(player.getName() + " managed to flee from the fight! (game closed)");
+                } else {
+                    System.out.printf("%n----- Oh no! %s was killed by %s! -----%n", player.getName(), enemy.getName());
+                    System.out.printf("> %s killed: %s%n", player.getName(), enemiesKilled);
+                }
                 break;
             }
         }
 
+        // INFO -- FILE MANAGER
+        try {
+            System.out.println("\n========== SCORES ==========\n");
+            scoreManager.addScore(player.getName(), enemiesKilled);
+            scoreManager.writeScores();
 
-        // ----- FILE MANAGER
-        // TODO: setup file reader / write methods
+            scoreManager.displayScores();
+        } catch (Exception e) {
+            System.out.printf("%n> Error: %s (%s) %n", e.getMessage(), e.getClass().getName());
+        }
+        scannerManager.getScanner().close();
 
-
-        scanner.getScanner().close();
-        // Bonus: when all done, rework display in CLI (not user-friendly, right now)
+        // TODO (Bonus): when all done, rework display in CLI (not user-friendly, right now)
     }
 }

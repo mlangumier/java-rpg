@@ -40,7 +40,7 @@ public class ScannerManager {
      * @throws WrongUserInput
      */
     public ActionType inputAction() throws WrongUserInput {
-        int actionNbr = this.scanner.nextInt();
+        int actionNbr = Integer.parseInt(this.scanner.nextLine().trim());
         checkSelectedAction(actionNbr - 1);
 
         return ActionType.values()[actionNbr - 1];

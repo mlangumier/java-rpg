@@ -4,7 +4,6 @@ import rpg.character.enemy.Enemy;
 import rpg.character.enemy.creatures.*;
 import rpg.character.player.Player;
 import rpg.enums.EnemyType;
-import rpg.exceptions.FailedEnemyCreation;
 
 import java.util.Random;
 
@@ -32,6 +31,7 @@ public class GameManager {
     public Enemy createNewEnemy () {
         EnemyType randomEnemy = EnemyType.values()[random.nextInt(EnemyType.values().length)];
 
+        // TODO: Use Factory Design Pattern instead of this
         return switch (randomEnemy) {
             case EnemyType.GOBLIN -> new Goblin();
             case EnemyType.GOBLIN_LEADER -> new GoblinLeader();

@@ -73,6 +73,7 @@ public class Player extends Character implements Spell {
 
         int formerHealth = getHealth();
         int roll = new Dice(DiceType.FOUR).rollDice() + 4;
+        this.setPotions(this.getPotions() - 1);
         this.setHealth(this.getHealth() + roll);
 
         if (this.getHealth() > this.getMaxHealth()) {
@@ -89,7 +90,6 @@ public class Player extends Character implements Spell {
     public void addPotion() throws ResourceFullException {
         checkMaxPotions(1);
         this.setPotions(this.getPotions() + 1);
-        System.out.println("You found one potion.");
     }
 
     /**
@@ -155,7 +155,7 @@ public class Player extends Character implements Spell {
     public void checkMaxPotions(int quantity) throws ResourceFullException {
         int potionTotal = this.getPotions() + quantity;
 
-        if (potionTotal >= this.getMaxPotions()) {
+        if (potionTotal > this.getMaxPotions()) {
             throw new ResourceFullException(String.format("You can't carry any more potions! (%s/%s)", potionTotal, this.getMaxPotions()));
         }
         // (later) Also manage the scenario where we add multiple potions (ex: get 3 potions, but only 2 free slot)

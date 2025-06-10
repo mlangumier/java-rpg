@@ -25,17 +25,7 @@ public abstract class Enemy extends Character {
         super(name, maxHealth, attack, defence);
     }
 
-    // ----- Generate stats
-
-    /**
-     * Generate the enemy's { attack } stat randomly by rolling a dice {hitDie} multiple times {numberOfDice}
-     * @param hitDie {enum DiceType} Which dice to use to roll (d6, d8, d12, etc.)
-     * @param numberOfDice How many dice do we roll
-     * @return The attack bonus score of the enemy
-     */
-    public int generateAttackStat(DiceType hitDie, int numberOfDice) {
-        return new Dice(hitDie).rollMultipleDice(numberOfDice);
-    }
+    // Setup methods to generate semi-random stats,  (ex: goblin has 2d6 health)
 
     public String getInfo () {
         return String.format("%s: %s HP",  this.getName(), this.getHealth());
