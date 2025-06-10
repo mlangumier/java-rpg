@@ -11,7 +11,8 @@ import rpg.utils.Dice;
 public class Player extends Character implements Spell {
     private int mana;
     private int maxMana;
-    private int potion;
+    private int potions;
+    private int maxPotions;
 
     /**
      * Constructor
@@ -21,13 +22,14 @@ public class Player extends Character implements Spell {
      * @param attack    The bonus the character will add to their attack to hit other characters
      * @param defence   The protection score of the character, given through armor or evasion
      * @param maxMana   The maximum mana resource the character will spend to use their powers, also sets the character's starting mana (can not go above max)
-     * @param potion    The number of potions the character can use to regain health
+     * @param potions    The number of potions the character can use to regain health
      */
-    public Player(String name, int maxHealth, int attack, int defence, int maxMana, int potion) {
+    public Player(String name, int maxHealth, int attack, int defence, int maxMana, int potions) {
         super(name, maxHealth, attack, defence);
         this.maxMana = maxMana;
         this.mana = maxMana;
-        this.potion = potion;
+        this.maxPotions = 3;
+        this.potions = potions;
     }
 
     public int getMaxMana() {
@@ -46,12 +48,20 @@ public class Player extends Character implements Spell {
         this.mana = mana;
     }
 
-    public int getPotion() {
-        return potion;
+    public int getPotions() {
+        return potions;
     }
 
-    public void setPotion(int potion) {
-        this.potion = potion;
+    public void setPotions(int potions) {
+        this.potions = potions;
+    }
+
+    public int getMaxPotions() {
+        return maxPotions;
+    }
+
+    public void setMaxPotions(int maxPotions) {
+        this.maxPotions = maxPotions;
     }
 
     /**
@@ -70,6 +80,16 @@ public class Player extends Character implements Spell {
         }
 
         System.out.printf("Healed %shp (%shp -> %shp)%n", roll, formerHealth, this.showRemainingHealth());
+    }
+
+    /**
+     * Adds a healing potion to the player's inventory
+     * @throws ResourceFullException if the player already has the maximum amount of potions
+     */
+    public void addPotion() throws ResourceFullException {
+        checkMaxPotions(1);
+        this.setPotions(this.getPotions() + 1);
+        System.out.println("You found one potion.");
     }
 
     /**
@@ -105,6 +125,17 @@ public class Player extends Character implements Spell {
         return damage;
     }
 
+    public void regainMana (int quantity) throws ResourceFullException {
+        this.checkIsManaFull();
+        int tempMana = this.getMana() + quantity;
+
+        if (tempMana >= this.getMaxMana()) {
+            this.setMana(this.getMaxMana());
+        } else {
+            this.setMana(this.getMana() + quantity);
+        }
+    }
+
     // --- EXCEPTIONS CHECKERS
 
     /**
@@ -112,9 +143,22 @@ public class Player extends Character implements Spell {
      * @throws MissingItemException if no potions are available
      */
     private void checkPotionAvailability() throws MissingItemException {
-        if (this.getPotion() <= 0) {
+        if (this.getPotions() <= 0) {
             throw new MissingItemException("You don't have any potion to use!");
         }
+    }
+
+    /**
+     * Check if the player has enough space to get more potions.
+     * @throws ResourceFullException if the maximum amount of potion was already reached
+     */
+    public void checkMaxPotions(int quantity) throws ResourceFullException {
+        int potionTotal = this.getPotions() + quantity;
+
+        if (potionTotal >= this.getMaxPotions()) {
+            throw new ResourceFullException(String.format("You can't carry any more potions! (%s/%s)", potionTotal, this.getMaxPotions()));
+        }
+        // (later) Also manage the scenario where we add multiple potions (ex: get 3 potions, but only 2 free slot)
     }
 
     /**
@@ -124,6 +168,16 @@ public class Player extends Character implements Spell {
     private void checkIsHealthFull() throws ResourceFullException {
         if (this.getHealth() == this.getMaxHealth()) {
             throw new ResourceFullException("Your health is already full!");
+        }
+    }
+
+    /**
+     * Checks if the
+     * @throws ResourceFullException if the amount of mana the user will get is
+     */
+    private void checkIsManaFull() throws ResourceFullException {
+        if (this.getMana() >= this.getMaxMana()) {
+            throw new ResourceFullException("Mana is full. Can't regain any more mana.");
         }
     }
 
@@ -140,11 +194,11 @@ public class Player extends Character implements Spell {
     // --- DISPLAY METHODS
 
     public String getInfo () {
-        return String.format("%s: %s/%s HP | %s/%s Mana | %s Potion%s", this.getName(), this.getHealth(), this.getMaxHealth(), this.getMana(), this.getMaxMana(), this.getPotion(), this.getPotion() > 1 ? "s" : "");
+        return String.format("%s: %s/%s HP | %s/%s Mana | %s/%s Potion%s", this.getName(), this.getHealth(), this.getMaxHealth(), this.getMana(), this.getMaxMana(), this.getPotions(), this.getMaxPotions(), this.getPotions() > 1 ? "s" : "");
     }
 
     @Override
     public String toString() {
-        return String.format("Player: {name=%s, health=%s/%s, mana=%s/%s, attack_bonus=%s, defence=%s, nbr_of_potions=%s}", name, health, maxHealth, mana, maxMana, attack, defence, potion);
+        return String.format("Player: {name=%s, health=%s/%s, mana=%s/%s, attack_bonus=%s, defence=%s, nbr_of_potions=%s/%s}", name, health, maxHealth, mana, maxMana, attack, defence, potions, maxPotions);
     }
 }

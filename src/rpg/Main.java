@@ -88,8 +88,12 @@ public class Main {
                 } else {
                     System.out.printf("%s is dead!%n", enemy.getName());
                     enemiesKilled++;
-                    player.setPotion(player.getPotion() + 1); // Setup method "addPotion(qt)"
-                    player.setMana(player.getMana() + 5); // Setup method "regainMana(qt)" + check maxMana
+                    try {
+                        player.addPotion();
+                        player.regainMana(5);
+                    } catch (Exception e) {
+                        System.out.print(e.getMessage() + " ");
+                    }
                 }
             }
 
