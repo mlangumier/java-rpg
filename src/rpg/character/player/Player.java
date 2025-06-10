@@ -57,25 +57,19 @@ public class Player extends Character implements Spell {
     /**
      * The player uses a Potion to heal himself and regain some Health
      */
-    public void usePotion() {
-        try {
-            this.checkPotionAvailability();
-            this.checkIsHealthFull();
+    public void usePotion() throws MissingItemException, ResourceFullException {
+        this.checkPotionAvailability();
+        this.checkIsHealthFull();
 
-            int formerHealth = getHealth();
-            int roll = new Dice(DiceType.FOUR).rollDice() + 4;
-            this.setHealth(this.getHealth() + roll);
+        int formerHealth = getHealth();
+        int roll = new Dice(DiceType.FOUR).rollDice() + 4;
+        this.setHealth(this.getHealth() + roll);
 
-            if (this.getHealth() > this.getMaxHealth()) {
-                setHealth(this.getMaxHealth());
-            }
-
-            System.out.printf("Healed %shp (%shp -> %shp)%n", roll, formerHealth, this.showRemainingHealth());
-        } catch (MissingItemException | ResourceFullException e) {
-            System.out.println(e.getMessage());
-        } catch (Exception e) {
-            System.err.printf("Error: %s (from: %s)%n", e.getMessage(), e.getClass());
+        if (this.getHealth() > this.getMaxHealth()) {
+            setHealth(this.getMaxHealth());
         }
+
+        System.out.printf("Healed %shp (%shp -> %shp)%n", roll, formerHealth, this.showRemainingHealth());
     }
 
     /**
@@ -83,24 +77,17 @@ public class Player extends Character implements Spell {
      * A spell never misses. Calculates the damage done to the enemy.
      * @param target The target of the spell
      */
-    public void spellAction (Character target) {
-        // TODO: full combat method (temp -> move to a CombatManager/ActionManager (PlayerService?) later)
+    public void spellAction (Character target) throws NotEnoughResourceException {
         int manaCost = 20;
 
-        try {
-            this.checkManaAvailability(manaCost);
-            this.setMana(getMana() - manaCost);
+        this.checkManaAvailability(manaCost);
+        this.setMana(getMana() - manaCost);
 
-            int damage = useSpell(manaCost);
+        int damage = useSpell(manaCost);
 
-            target.receivesDamage(damage);
+        target.receivesDamage(damage);
 
-            System.out.printf("%s used a powerful spell against %s and dealt %s damage.%n", this.getName(), target.getName(), damage);
-        } catch (NotEnoughResourceException e) {
-            System.out.println(e.getMessage());
-        } catch (Exception e) {
-            System.err.printf("Error: %s (from: %s)%n", e.getMessage(), e.getClass());
-        }
+        System.out.printf("%s used a powerful spell against %s and dealt %s damage.%n", this.getName(), target.getName(), damage);
     }
 
     /**

@@ -3,6 +3,9 @@ package rpg;
 import rpg.character.enemy.Enemy;
 import rpg.character.player.Player;
 import rpg.enums.ActionType;
+import rpg.exceptions.MissingItemException;
+import rpg.exceptions.NotEnoughResourceException;
+import rpg.exceptions.ResourceFullException;
 import rpg.exceptions.WrongUserInput;
 import rpg.services.GameManager;
 import rpg.services.ScannerManager;
@@ -55,12 +58,10 @@ public class Main {
                 System.out.printf("Actions: %s %nChoose an action: ", gameManager.displayActionChoices());
 
                 // ----- PLAYER CHOSES AN ACTION
-                boolean actionTaken = false;
-                while (!actionTaken) {
+                while (true) {
                     try {
                         ActionType selectedAction = scanner.inputAction(); // Manage errors for non-int & non-valid values
 
-                        // TODO: Verify individual actions & corresponding errors (-> no more potion, health already full, not enough mana, etc.)
                         switch (selectedAction) {
                             case ActionType.ATTACK -> player.attackAction(enemy);
                             case ActionType.CAST_SPELL -> player.spellAction(enemy);
@@ -68,12 +69,11 @@ public class Main {
                             case ActionType.LEAVE_GAME -> gameMustClose = true; // Needs better setup
                         }
 
-                        actionTaken = true;
-                    } catch (WrongUserInput e) {
+                        break;
+                    } catch (WrongUserInput | NotEnoughResourceException | MissingItemException | ResourceFullException e) {
                         System.out.println(e.getMessage());
                         System.out.printf("%s %nChose an action: ", gameManager.displayActionChoices());
                     } catch (Exception e) {
-                        // TODO: catch action errors
                         System.out.print(e.getMessage() + " ");
                     }
                 }
@@ -84,10 +84,9 @@ public class Main {
                 }
 
                 if (enemy.checkIfCharacterIsAlive()) {
-                    // TODO: Setup enemy's turn
                     enemy.attackAction(player);
                 } else {
-                    System.out.printf(enemy.getName() + " is dead!%n");
+                    System.out.printf("%s is dead!%n", enemy.getName());
                     enemiesKilled++;
                     player.setPotion(player.getPotion() + 1); // Setup method "addPotion(qt)"
                     player.setMana(player.getMana() + 5); // Setup method "regainMana(qt)" + check maxMana
