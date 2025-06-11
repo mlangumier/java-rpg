@@ -5,5 +5,6 @@ public enum EnemyType {
     GOBLIN_LEADER,
     TROLL,
     WOLF,
+    BEAR,
     DRAGON
 }

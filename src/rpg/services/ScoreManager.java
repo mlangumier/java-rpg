@@ -71,11 +71,11 @@ public class ScoreManager {
 
     /**
      * Add a new score to the current list
-     * @param playerName The player whose score we're recording
-     * @param score Number of enemies the player managed to kill
+     * @param heroName The hero whose score we're recording
+     * @param score Number of enemies the hero managed to kill
      */
-    public void addScore(String playerName, int score) {
-        this.lines.add(String.format("%s: %s enemies killed! (%s)", playerName, score, LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
+    public void addScore(String heroName, int score) {
+        this.lines.add(String.format("%s: %s enemies killed! (%s)", heroName, score, LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
     }
 
     /**

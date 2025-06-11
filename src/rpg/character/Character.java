@@ -78,7 +78,7 @@ public abstract class Character {
      * @param target The target of the attack
      */
     public void attackAction(Character target) {
-        // TODO: full combat method (temp -> move to a CombatManager/ActionManager (PlayerService?) later)
+        // TODO: full combat method (temp -> move to a CombatManager/ActionManager (HeroService?) later)
 
         int attackScore = this.calcAttack();
         boolean doesAttackHits = checkIfAttackHits(attackScore, target);
@@ -130,7 +130,7 @@ public abstract class Character {
      * Checks if the character is still alive ("health" above "0")
      * @return Whether the character is still alive or not.
      */
-    public boolean checkIfCharacterIsAlive() {
+    public boolean checkIsAlive() {
         return this.getHealth() > 0;
     }
 

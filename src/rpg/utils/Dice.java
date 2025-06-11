@@ -8,6 +8,10 @@ public class Dice {
     private DiceType value;
     private final Random random = new Random();
 
+    /**
+     * Constructor
+     * @param value Value of the dice (how many faces the dice has)
+     */
     public Dice(DiceType value) {
         this.value = value;
     }
@@ -29,6 +33,11 @@ public class Dice {
         return random.nextInt(value.getValue()) + 1;
     }
 
+    /**
+     *
+     * @param nbrDice
+     * @return
+     */
     public int rollMultipleDice(int nbrDice) {
         int total = 0;
 

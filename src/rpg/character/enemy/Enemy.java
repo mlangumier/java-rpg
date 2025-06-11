@@ -1,8 +1,6 @@
 package rpg.character.enemy;
 
 import rpg.character.Character;
-import rpg.enums.DiceType;
-import rpg.utils.Dice;
 
 public abstract class Enemy extends Character {
 
@@ -27,8 +25,12 @@ public abstract class Enemy extends Character {
 
     // Setup methods to generate semi-random stats,  (ex: goblin has 2d6 health)
 
+    /**
+     * Get information the player should know about an enemy
+     * @return Information about the enemy: health and defence
+     */
     public String getInfo () {
-        return String.format("%s: %s HP",  this.getName(), this.getHealth());
+        return String.format("%s: %s HP | %s Defence",  this.getName(), this.getHealth(), this.getDefence());
     }
 
     @Override

@@ -2,7 +2,7 @@ package rpg.services;
 
 import rpg.character.enemy.Enemy;
 import rpg.character.enemy.creatures.*;
-import rpg.character.player.Player;
+import rpg.character.hero.Hero;
 import rpg.enums.EnemyType;
 
 import java.util.Random;
@@ -16,11 +16,11 @@ public class GameManager {
 
     /**
      * Create a new character named by the player.
-     * @param name Name the player gives to the character.
+     * @param name Name the player gives to his Hero.
      * @return A new character.
      */
-    public Player createPlayerCharacter (String name) {
-        return new Player(name, 50, 5, 15, 30, 1);
+    public Hero createHero (String name) {
+        return new Hero(name, 50, 5, 15, 30, 3);
     }
 
     /**
@@ -31,12 +31,12 @@ public class GameManager {
     public Enemy createNewEnemy () {
         EnemyType randomEnemy = EnemyType.values()[random.nextInt(EnemyType.values().length)];
 
-        // TODO: Use Factory Design Pattern instead of this
         return switch (randomEnemy) {
             case EnemyType.GOBLIN -> new Goblin();
             case EnemyType.GOBLIN_LEADER -> new GoblinLeader();
             case EnemyType.TROLL ->  new Troll();
             case EnemyType.WOLF ->  new Wolf();
+            case EnemyType.BEAR ->  new Bear();
             case EnemyType.DRAGON -> new Dragon();
         };
     }
