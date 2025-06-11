@@ -2,6 +2,9 @@ package rpg.utils;
 
 import rpg.enums.DiceType;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 public class Dice {
@@ -10,6 +13,7 @@ public class Dice {
 
     /**
      * Constructor
+     *
      * @param value Value of the dice (how many faces the dice has)
      */
     public Dice(DiceType value) {
@@ -25,7 +29,7 @@ public class Dice {
     }
 
     /**
-     * Roll a dice of the chosen value
+     * Rolls the dice - Gives a random number between 1 and the number of sides on the dice
      *
      * @return The value of the dice roll
      */
@@ -34,9 +38,10 @@ public class Dice {
     }
 
     /**
+     * Rolls the dice multiple times and gives the total of their values
      *
-     * @param nbrDice
-     * @return
+     * @param nbrDice The number of dice we want to roll
+     * @return The total sum of the dice rolls
      */
     public int rollMultipleDice(int nbrDice) {
         int total = 0;

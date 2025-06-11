@@ -67,7 +67,9 @@ public class Main {
                             case ActionType.ATTACK -> hero.attackAction(enemy);
                             case ActionType.CAST_SPELL -> hero.spellAction(enemy);
                             case ActionType.DRINK_POTION -> hero.usePotion();
-                            case ActionType.LEAVE_GAME -> gameMustClose = true; // Needs better setup
+                            case ActionType.LEAVE_GAME ->
+                                    gameMustClose = true; // TODO: implement this -> System.exit(0) on press "0"
+                            // TODO: case ActionType.FLEE_COMBAT -> hero.fleeCombat(); // Takes an opportunity attack & skip to next enemy?
                         }
 
                         break;
@@ -94,10 +96,10 @@ public class Main {
                     System.out.printf("=== %s is dead!%n", enemy.getName());
                     enemiesKilled++;
                     try {
-                        System.out.println("\nLooting the body and resting for a bit.");
-//                        System.out.println("You found one (1) potion.");
-//                        hero.addPotion();
-                        hero.regainMana(15);
+                        int manaRegen = 15;
+                        hero.regainMana(manaRegen);
+                        // hero.addPotion(); // System.out.println("You found one (1) potion.");
+                        System.out.printf("\nContinuing the adventure..%n");
                     } catch (ResourceFullException ignored) {
                         // Adapt this later if setup inventory space
                     } catch (Exception e) {

@@ -54,6 +54,7 @@ public class ScoreManager {
 
     /**
      * Reads all the scores recorded in the file. If the file doesn't exist, automatically creates it.
+     *
      * @throws IOException If the file doesn't exist
      */
     public void readScores() throws IOException {
@@ -71,8 +72,9 @@ public class ScoreManager {
 
     /**
      * Add a new score to the current list
+     *
      * @param heroName The hero whose score we're recording
-     * @param score Number of enemies the hero managed to kill
+     * @param score    Number of enemies the hero managed to kill
      */
     public void addScore(String heroName, int score) {
         this.lines.add(String.format("%s: %s enemies killed! (%s)", heroName, score, LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));

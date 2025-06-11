@@ -115,10 +115,12 @@ public class Hero extends Character implements Spell {
      */
     @Override
     public int useSpell(int manaCost) {
-        int damage = this.getAttack();
+        int damage = 0;
+
         for (int i = this.getAttack(); i > 0; i--) {
             damage += new Dice(DiceType.EIGHT).rollDice();
         }
+
         return damage;
     }
 
